@@ -116,7 +116,8 @@ enum ompio_fs_type
     UFS = 1,
     PVFS2 = 2,
     LUSTRE = 3,
-    PLFS = 4
+    PLFS = 4,
+	GPFS = 5
 };
 
 OMPI_DECLSPEC extern mca_io_base_component_2_0_0_t mca_io_ompio_component;
