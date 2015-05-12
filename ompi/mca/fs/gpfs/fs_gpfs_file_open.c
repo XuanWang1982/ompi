@@ -72,6 +72,16 @@ mca_fs_gpfs_file_open (struct ompi_communicator_t *comm,
         amode = amode | O_EXCL;
 
     printf("Opening a file using Linux open() within fs_gpfs_file_open\n");
+
+	// for DEBUG
+	//int gdb = 0;
+    //char hostname[256];
+    //gethostname(hostname, sizeof(hostname));
+    //printf("PID %d on %s ready for attach\n", getpid(), hostname);
+    //fflush(stdout);
+    //while (0 == gdb)
+        //sleep(5);
+	
     fh->fd = open (filename, amode, perm);
     if (-1 == fh->fd) {
         return OMPI_ERROR;
@@ -79,9 +89,7 @@ mca_fs_gpfs_file_open (struct ompi_communicator_t *comm,
 
     fh->f_amode=access_mode;
     //Setting GPFS Hints
-	printf("Before setting GPFS Hints");
     mca_fs_gpfs_file_set_info(fh, info);
-	printf("After setting GPFS Hints");
 
     return OMPI_SUCCESS;
 }
