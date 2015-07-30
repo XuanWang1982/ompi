@@ -181,14 +181,6 @@ int mca_fs_gpfs_file_set_info(mca_io_ompio_file_t *fh, struct ompi_info_t *info)
 int mca_fs_gpfs_prefetch_hints(int access_mode,
         mca_io_ompio_file_t *fh, struct ompi_info_t *info) {
 
-    //CN: What is this check good for, as access_mode must be exactly one of 
-    //CN: RDONLY, WRONLY, RDWR, see MPI Spec 3.0 p.493
-    //CN: Should/is this checked already in another/the (P)MPI layer?
-    if (! (access_mode & MPI_MODE_RDONLY | access_mode & MPI_MODE_WRONLY
-            | access_mode & MPI_MODE_RDWR)) {
-        return OMPI_SUCCESS;
-    }
-
     //CN: Is this future proof, no description what gpfs_file_t is exactly
     //CN: In gpfs.h it seems void* on WINDOWS and int on UNIX
     //CN: Does this fit fh->fd in all cases?
