@@ -199,15 +199,17 @@ int mca_fs_gpfs_prefetch_hints(int access_mode,
 
     strcpy(gpfsHintsKey, "useSIOXLib");
     ompi_info_get(info_selected, gpfsHintsKey, valueLen, value, &flag);
-    if (flag && strcmp(value, "true") == 0) {
-        //using the SIOX lib and the I/O pattern selection
-        ret = mca_fs_gpfs_io_selection(fh, info, info_selected);
-        if (ret != OMPI_SUCCESS)
-            return ret;
-    }
-    else {
-        //CN: Is there something left to do here?
-        //TODO Sending the MPI_INFO to SIOX for knowledgebase
+    if (flag) {
+        if(strcmp(value, "true") == 0) {
+            //using the SIOX lib and the I/O pattern selection
+            ret = mca_fs_gpfs_io_selection(fh, info, info_selected);
+            if (ret != OMPI_SUCCESS)
+                return ret;
+        }
+        else {
+            //CN: Is there something left to do here?
+            //TODO Sending the MPI_INFO to SIOX for knowledgebase
+        }
     }
 
     //Setting GPFS Hint - gpfsAccessRange
