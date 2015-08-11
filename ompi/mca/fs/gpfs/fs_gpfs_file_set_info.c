@@ -169,23 +169,6 @@ struct {
 
 int mca_fs_gpfs_file_set_info(mca_io_ompio_file_t *fh, struct ompi_info_t *info) {
     //DEBUG: fprintf(stderr, "GPFS SET INFO\n");
-    int ret;
-    //CN: Why subfunction?
-    ret = mca_fs_gpfs_prefetch_hints(fh->f_amode, fh, info);
-    return ret;
-}
-
-//CN: The functionality of this function translates between siox keys and GPFS structs
-//CN: Would this not be the job of siox - providing a gps hint struct?
-//CN: If we want to do this, we schould do this in a modular way, allowing to exchange siox easiely
-int mca_fs_gpfs_prefetch_hints(int access_mode,
-        mca_io_ompio_file_t *fh, struct ompi_info_t *info) {
-
-    //CN: Is this future proof, no description what gpfs_file_t is exactly
-    //CN: In gpfs.h it seems void* on WINDOWS and int on UNIX
-    //CN: Does this fit fh->fd in all cases?
-    gpfs_file_t gpfs_file_handle = fh->fd;
-
     int rc = 0;
     int flag;
     int valueLen = MPI_MAX_INFO_VAL;
@@ -196,8 +179,9 @@ int mca_fs_gpfs_prefetch_hints(int access_mode,
     int ret = OMPI_SUCCESS;
     ompi_info_t *info_selected;
     info_selected = info;
-
-    strcpy(gpfsHintsKey, "useSIOXLib");
+    gpfs_file_t gpfs_file_handle = fh->fd;
+    
+	strcpy(gpfsHintsKey, "useSIOXLib");
     ompi_info_get(info_selected, gpfsHintsKey, valueLen, value, &flag);
     if (flag) {
         if(strcmp(value, "true") == 0) {
@@ -466,8 +450,8 @@ int mca_fs_gpfs_prefetch_hints(int access_mode,
     //Setting GPFS Hint - gpfsGetExpTime
     //Setting GPFS Hint - gpfsSetAppendOnly
     //Setting GPFS Hint - gpfsGetAppendOnly
-
-    return ret;
+	
+	return ret;
 }
 
 //CN: Will this function set info keys with siox prefix?
